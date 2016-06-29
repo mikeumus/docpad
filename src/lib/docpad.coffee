@@ -3121,7 +3121,7 @@ class DocPad extends EventEmitterGrouped
 			if loggers.debug? is false
 				loggers.debug = loggers.logger
 					.pipe(
-						(require('caterpillar-human').create())(color:false)
+						require('caterpillar-human').create(color:false)
 					)
 					.pipe(
 						require('fs').createWriteStream(@debugLogPath)
