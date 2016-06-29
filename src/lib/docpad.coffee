@@ -1991,8 +1991,8 @@ class DocPad extends EventEmitterGrouped
 				# Return safely
 				return true
 			)
-		@userConfig = extendr.dereferenceJSON(@userConfig)
-		@initialConfig = extendr.dereferenceJSON(@initialConfig)
+		@userConfig = extendr.dereference(@userConfig)
+		@initialConfig = extendr.dereference(@initialConfig)
 
 		# Extract action
 		if instanceConfig.action?
@@ -2292,7 +2292,7 @@ class DocPad extends EventEmitterGrouped
 				configsToMerge.push(envConfig)  if envConfig
 
 		# Merge
-		extendr.deepDefaults(configsToMerge...)
+		extendr.safeDeepExtendPlainObjects(configsToMerge...)
 
 		# Chain
 		@
@@ -2309,8 +2309,8 @@ class DocPad extends EventEmitterGrouped
 		# Merge in the instance configurations
 		if instanceConfig
 			logLevel = @getLogLevel()
-			extendr.deepDefaults(@instanceConfig, instanceConfig)
-			extendr.deepDefaults(@config, instanceConfig)  if @config  # @TODO document why there is the if
+			extendr.safeDeepExtendPlainObjects(@instanceConfig, instanceConfig)
+			extendr.safeDeepExtendPlainObjects(@config, instanceConfig)  if @config  # @TODO document why there is the if
 			@setLogLevel(instanceConfig.logLevel)  if instanceConfig.logLevel and instanceConfig.logLevel isnt logLevel
 		@
 
@@ -2349,7 +2349,7 @@ class DocPad extends EventEmitterGrouped
 		docpad.mergeConfigurations(configPackages, configsToMerge)
 
 		# Extract and apply the server
-		@setServer extendr.defaults({
+		@setServer extendr.safeShallowExtendPlainObjects({
 			serverHttp: @config.serverHttp
 			serverExpress: @config.serverExpress
 		}, @config.server or {})
@@ -4312,7 +4312,7 @@ class DocPad extends EventEmitterGrouped
 			return next(err)  if err
 
 			# Completion callback
-			tasks = new docpad.TaskGroup "contextualizeFiles tasks", concurrency:0, next:(err) ->
+			tasks = docpad.createTaskGroup "contextualizeFiles tasks", concurrency:0, next:(err) ->
 				# Kill the timer
 				clearInterval(slowFilesTimer)
 				slowFilesTimer = null
@@ -4405,7 +4405,7 @@ class DocPad extends EventEmitterGrouped
 				# Prepare
 				return next(err)  if err
 
-				subTasks = new docpad.TaskGroup "renderCollection: #{collectionToRender.options.name}", concurrency:0, next:(err) ->
+				subTasks = docpad.createTaskGroup "renderCollection: #{collectionToRender.options.name}", concurrency:0, next:(err) ->
 					# Prepare
 					return next(err)  if err
 
@@ -4433,7 +4433,7 @@ class DocPad extends EventEmitterGrouped
 			return next(err)  if err
 
 			# Async
-			tasks = new docpad.TaskGroup "renderCollection: renderBefore tasks", next:(err) ->
+			tasks = docpad.createTaskGroup "renderCollection: renderBefore tasks", next:(err) ->
 				# Kill the timer
 				clearInterval(slowFilesTimer)
 				slowFilesTimer = null
@@ -4514,7 +4514,7 @@ class DocPad extends EventEmitterGrouped
 			return next(err)  if err
 
 			# Completion callback
-			tasks = new docpad.TaskGroup "writeFiles tasks", concurrency:0, next:(err) ->
+			tasks = docpad.createTaskGroup "writeFiles tasks", concurrency:0, next:(err) ->
 				# Kill the timer
 				clearInterval(slowFilesTimer)
 				slowFilesTimer = null
@@ -4542,7 +4542,7 @@ class DocPad extends EventEmitterGrouped
 					slowFilesObject[file.id] = file.get('relativePath')
 
 					# Create sub tasks
-					fileTasks = new docpad.TaskGroup "tasks for file write: #{filePath}", concurrency:0, next:(err) ->
+					fileTasks = docpad.createTaskGroup "tasks for file write: #{filePath}", concurrency:0, next:(err) ->
 						delete slowFilesObject[file.id]
 						opts.progress?.tick()
 						return complete(err)
@@ -5323,7 +5323,7 @@ class DocPad extends EventEmitterGrouped
 			docpad.destroyWatchers()
 
 			# Start a group
-			tasks = new docpad.TaskGroup("watch tasks", {concurrency:0, next})
+			tasks = docpad.createTaskGroup("watch tasks", {concurrency:0, next})
 
 			# Watch reload paths
 			reloadPaths = union(config.reloadPaths, config.configPaths)
