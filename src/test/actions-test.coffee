@@ -31,7 +31,7 @@ cliPath    = pathUtil.join(docpadPath, 'bin', 'docpad')
 
 # Params
 port = 9770
-hostname = "0.0.0.0"
+hostname = "127.0.0.1"
 baseUrl = "http://#{hostname}:#{port}"
 testWait = 1000*60*5  # five minutes
 
@@ -195,7 +195,7 @@ joe.suite 'docpad-actions', (suite,test) ->
 
 				deepEqual(
 					res.redirects
-					['http://0.0.0.0:9770/secondary-urls.html']
+					['http://127.0.0.1:9770/secondary-urls.html']
 					'redirects to be as expected'
 				)
 
@@ -214,7 +214,7 @@ joe.suite 'docpad-actions', (suite,test) ->
 
 				deepEqual(
 					res.redirects
-					['http://0.0.0.0:9770/secondary-urls.html']
+					['http://127.0.0.1:9770/secondary-urls.html']
 					'redirects to be as expected'
 				)
 

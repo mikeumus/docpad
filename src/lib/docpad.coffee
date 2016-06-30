@@ -11,7 +11,6 @@ require('babel-polyfill')
 
 # Important
 pathUtil = require('path')
-lazyRequire = require('lazy-require')
 corePath = pathUtil.resolve(__dirname, '..', '..')
 
 

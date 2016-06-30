@@ -169,7 +169,6 @@
     "ignorefs": "^1.1.1",
     "istextorbinary": "^2.1.0",
     "jschardet": "~1.4.1",
-    "lazy-require": "^2.2.0",
     "method-override": "^2.3.6",
     "mime": "^1.3.4",
     "progressbar": "^1.1.1",
