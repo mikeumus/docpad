@@ -528,7 +528,7 @@ class FileModel extends Model
 	toJSON: (dereference=false) ->
 		data = super
 		data.meta = @getMeta().toJSON()
-		data = extendr.dereference(data)  if dereference is true
+		data = extendr.dereferenceJSON(data)  if dereference is true
 		return data
 
 	###*

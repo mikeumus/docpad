@@ -1990,8 +1990,8 @@ class DocPad extends EventEmitterGrouped
 				# Return safely
 				return true
 			)
-		@userConfig = extendr.dereference(@userConfig)
-		@initialConfig = extendr.dereference(@initialConfig)
+		@userConfig = extendr.dereferenceJSON(@userConfig)
+		@initialConfig = extendr.dereferenceJSON(@initialConfig)
 
 		# Extract action
 		if instanceConfig.action?
@@ -2291,7 +2291,7 @@ class DocPad extends EventEmitterGrouped
 				configsToMerge.push(envConfig)  if envConfig
 
 		# Merge
-		extendr.safeDeepExtendPlainObjects(configsToMerge...)
+		extendr.deep(configsToMerge...)
 
 		# Chain
 		@
@@ -2308,8 +2308,8 @@ class DocPad extends EventEmitterGrouped
 		# Merge in the instance configurations
 		if instanceConfig
 			logLevel = @getLogLevel()
-			extendr.safeDeepExtendPlainObjects(@instanceConfig, instanceConfig)
-			extendr.safeDeepExtendPlainObjects(@config, instanceConfig)  if @config  # @TODO document why there is the if
+			extendr.deep(@instanceConfig, instanceConfig)
+			extendr.deep(@config, instanceConfig)  if @config  # @TODO document why there is the if
 			@setLogLevel(instanceConfig.logLevel)  if instanceConfig.logLevel and instanceConfig.logLevel isnt logLevel
 		@
 
@@ -2348,7 +2348,7 @@ class DocPad extends EventEmitterGrouped
 		docpad.mergeConfigurations(configPackages, configsToMerge)
 
 		# Extract and apply the server
-		@setServer extendr.safeShallowExtendPlainObjects({
+		@setServer extendr.extend({
 			serverHttp: @config.serverHttp
 			serverExpress: @config.serverExpress
 		}, @config.server or {})

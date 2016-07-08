@@ -162,7 +162,7 @@
     "envfile": "^2.1.1",
     "event-emitter-grouped": "2.4.3",
     "express": "^3.21.2",
-    "extendr": "^2.1.0",
+    "extendr": "^3.2.0",
     "extract-opts": "^3.3.1",
     "getmac": "^1.2.1",
     "hostenv": "^1.0.5",
